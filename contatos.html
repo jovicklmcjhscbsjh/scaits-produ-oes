@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scaits - Lista de Contatos</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: white;
+        }
+
+        header {
+            background-color: #1f1f1f;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #1DB954;
+        }
+
+        .profile-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .search-bar {
+            margin: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .search-bar input {
+            padding: 10px;
+            width: 80%;
+            max-width: 400px;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .contacts-list {
+            margin: 20px auto;
+            width: 90%;
+            max-width: 600px;
+            background-color: #1f1f1f;
+            border-radius: 10px;
+            padding: 10px;
+            display: none; /* Inicialmente oculto */
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #333;
+            cursor: pointer;
+        }
+
+        .contact-item:hover {
+            background-color: #1a1a1a;
+        }
+
+        .contact-item img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+
+        .contact-item span {
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        Scaits
+        <img src="https://via.placeholder.com/40" alt="Perfil" class="profile-icon" onclick="goToProfile()">
+    </header>
+
+    <div class="search-bar">
+        <input id="searchInput" type="text" placeholder="Pesquisar contatos..." onkeyup="filterContacts()">
+    </div>
+
+    <div class="contacts-list" id="contactsList">
+        <!-- A lista ficará vazia até o usuário iniciar uma conversa -->
+    </div>
+
+    <script>
+        let contacts = [];
+
+        function filterContacts() {
+            const searchInput = document.getElementById("searchInput").value.toLowerCase();
+            const contactsList = document.getElementById("contactsList");
+
+            // Exibir os contatos que correspondem à pesquisa
+            contactsList.innerHTML = "";
+            contacts.forEach(contact => {
+                if (contact.name.toLowerCase().includes(searchInput)) {
+                    const contactDiv = document.createElement("div");
+                    contactDiv.className = "contact-item";
+                    contactDiv.onclick = () => startChat(contact.name);
+                    contactDiv.innerHTML = `<img src="https://via.placeholder.com/50" alt="${contact.name}">
+                        <span>${contact.name}</span>`;
+                    contactsList.appendChild(contactDiv);
+                }
+            });
+        }
+
+        function startChat(contactName) {
+            // Adicionar o contato na lista de contatos após iniciar a conversa
+            if (!contacts.some(contact => contact.name === contactName)) {
+                contacts.push({ name: contactName });
+            }
+
+            // Atualizar a lista de contatos e exibir
+            document.querySelector(".contacts-list").style.display = "block";
+            filterContacts(); // Atualiza a lista com os novos contatos
+            window.location.href = `chat.html?user=${contactName}`;
+        }
+
+        function goToProfile() {
+            window.location.href = "perfil.html";
+        }
+    </script>
+</body>
+</html>
